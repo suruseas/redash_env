@@ -1,0 +1,23 @@
+version: '3'
+services:
+  redash:
+    image: redash/redash:latest
+    platform: linux/amd64
+    command: server
+    ports:
+      - '5001:5000'
+    environment:
+      REDASH_LOG_LEVEL: 'INFO'
+      REDASH_REDIS_URL: 'redis://redis:6379/0'
+      REDASH_DATABASE_URL: 'postgresql://postgres:password@postgres/postgres'
+    depends_on:
+      - redis
+      - postgres
+    volumes:
+      - ./db:/db
+  redis:
+    image: redis:latest
+  postgres:
+    image: postgres:latest
+    environment:
+      POSTGRES_PASSWORD: password
